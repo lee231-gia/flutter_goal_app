@@ -24,7 +24,18 @@ api_crud/
 |-- env.example
 `-- flutter_goal_app/
     |-- pubspec.yaml
-    `-- lib/main.dart
+    `-- lib/
+        |-- main.dart
+        |-- models/goal.dart
+        |-- api_services/api_services.dart
+        |-- database/local_goal_db.dart
+        `-- pages/
+            |-- home.dart
+            `-- widgets/
+                |-- filter_bar.dart
+                |-- goal_card.dart
+                |-- goal_form.dart
+                `-- goal_list.dart
 ```
 
 ## Database Setup
@@ -141,7 +152,7 @@ Important URL note:
 - Real phone must use your computer IP address, for example `http://192.168.1.10:8000/goals.php`.
 - Browser or desktop Flutter can use `http://localhost:8000/goals.php`.
 
-The URL is in `flutter_goal_app/lib/main.dart` inside `ApiService`.
+The URL is in `flutter_goal_app/lib/api_services/api_services.dart` inside `ApiService`.
 
 ## How the Code Works
 
@@ -183,19 +194,24 @@ $stmt->bind_param('i', $id);
 
 The `?` is a placeholder. `bind_param()` safely puts the value into the query. This helps prevent SQL injection.
 
-### `flutter_goal_app/lib/main.dart`
+### Flutter files
 
 The Flutter app is the frontend.
 
-- `Goal` is the Dart model class.
+- `main.dart` starts the app only, so it stays short.
+- `pages/home.dart` is the main screen, like the attached cat API `home.dart`.
+- `widgets/filter_bar.dart` is based on the cat tag filter bar, but it filters goal categories.
+- `widgets/goal_card.dart` is based on the cat card style, but it shows goal title, notes, category, term, and status.
+- `widgets/goal_list.dart` displays the goal cards, like the cat list file.
+- `widgets/goal_form.dart` contains the add/update form.
+- `models/goal.dart` is the Dart model class.
 - `Goal.fromJson()` converts API JSON into a Dart object.
 - `toJson()` converts a Dart object into JSON for the API.
-- `ApiService` sends HTTP requests to PHP.
+- `api_services/api_services.dart` sends HTTP requests to PHP.
 - `getGoals()` reads goals from the API.
 - `saveGoal()` creates or updates a goal.
 - `deleteGoal()` deletes a goal.
-- `LocalGoalDb` uses sqflite to cache the latest goals locally.
-- `GoalPage` displays the form and the list.
+- `database/local_goal_db.dart` uses sqflite to cache the latest goals locally.
 
 ## Common Teacher Questions
 

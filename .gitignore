@@ -4,3 +4,17 @@
 Thumbs.db
 .dart_tool/
 build/
+flutter_goal_app/.dart_tool/
+flutter_goal_app/build/
+flutter_goal_app/.metadata
+flutter_goal_app/.gitignore
+flutter_goal_app/README.md
+flutter_goal_app/.flutter-plugins*
+flutter_goal_app/analysis_options.yaml
+flutter_goal_app/android/
+flutter_goal_app/ios/
+flutter_goal_app/linux/
+flutter_goal_app/macos/
+flutter_goal_app/web/
+flutter_goal_app/windows/
+flutter_goal_app/test/
