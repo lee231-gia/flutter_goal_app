@@ -1,4 +1,20 @@
+
 CREATE DATABASE IF NOT EXISTS goal_tracker;
+
 USE goal_tracker;
-CREATE TABLE IF NOT EXISTS goals (id INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(150) NOT NULL, category VARCHAR(50) NOT NULL DEFAULT 'Personal', term VARCHAR(50) NOT NULL DEFAULT 'Short Term', status VARCHAR(50) NOT NULL DEFAULT 'Not Started', notes TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);
-INSERT INTO goals (title, category, term, status, notes) VALUES ('Finish PHP CRUD API', 'School', 'Short Term', 'In Progress', 'Prepare for final exam presentation.'), ('Save emergency fund', 'Personal', 'Long Term', 'Not Started', 'Add a small amount every week.'), ('Clean study table', 'Home', 'Short Term', 'Done', 'Keep school materials organized.');
+
+CREATE TABLE IF NOT EXISTS goals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(150) NOT NULL,
+    category VARCHAR(50) NOT NULL DEFAULT 'Personal',
+    term VARCHAR(50) NOT NULL DEFAULT 'Short Term',
+    status VARCHAR(50) NOT NULL DEFAULT 'Not Started',
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO goals (title, category, term, status, notes) VALUES
+    ('Finish PHP CRUD API', 'School', 'Short Term', 'In Progress', 'Prepare for final exam presentation.'),
+    ('Save emergency fund', 'Personal', 'Long Term', 'Not Started', 'Add a small amount every week.'),
+    ('Clean study table', 'Home', 'Short Term', 'Done', 'Keep school materials organized.');

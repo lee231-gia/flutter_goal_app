@@ -19,20 +19,43 @@ final class Goal
     {
     }
 
-    public function all(?string $category, ?string $term): array
+    public function all(?string $category, ?string $term, ?string $status): array
     {
-        $sql = 'SELECT * FROM goals ORDER BY id DESC';
+        $where = [];
+        $values = [];
+        $types = '';
+
+        if ($category) {
+            $where[] = 'category = ?';
+            $values[] = $category;
+            $types .= 's';
+        }
+
+        if ($term) {
+            $where[] = 'term = ?';
+            $values[] = $term;
+            $types .= 's';
+        }
+
+        if ($status) {
+            $where[] = 'status = ?';
+            $values[] = $status;
+            $types .= 's';
+        }
+
+        $sql = 'SELECT * FROM goals';
+        if ($where) {
+            $sql .= ' WHERE ' . implode(' AND ', $where);
+        }
+        $sql .= ' ORDER BY category ASC, term ASC, status ASC, id DESC';
         $stmt = $this->db->prepare($sql);
 
-        if ($category && $term) {
-            $stmt = $this->db->prepare('SELECT * FROM goals WHERE category = ? AND term = ? ORDER BY id DESC');
-            $stmt->bind_param('ss', $category, $term);
-        } elseif ($category) {
-            $stmt = $this->db->prepare('SELECT * FROM goals WHERE category = ? ORDER BY id DESC');
-            $stmt->bind_param('s', $category);
-        } elseif ($term) {
-            $stmt = $this->db->prepare('SELECT * FROM goals WHERE term = ? ORDER BY id DESC');
-            $stmt->bind_param('s', $term);
+        if ($values) {
+            $params = [$types];
+            foreach ($values as $index => $value) {
+                $params[] = &$values[$index];
+            }
+            $stmt->bind_param(...$params);
         }
 
         $stmt->execute();
@@ -104,7 +127,7 @@ function body(): array
 function sendJson(array $payload, int $status = 200): void
 {
     http_response_code($status);
-    echo json_encode($payload);
+    echo json_encode($payload, JSON_PRETTY_PRINT);
     exit;
 }
 
@@ -118,7 +141,11 @@ try {
     }
 
     if ($method === 'GET') {
-        sendJson(['data' => $goal->all($_GET['category'] ?? null, $_GET['term'] ?? null)]);
+        sendJson(['data' => $goal->all(
+            $_GET['category'] ?? null,
+            $_GET['term'] ?? null,
+            $_GET['status'] ?? null
+        )]);
     }
 
     if ($method === 'POST') {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/goal.dart';
@@ -9,16 +10,20 @@ class LocalGoalDb {
     _db ??= await openDatabase(
       join(await getDatabasesPath(), 'goals.db'),
       version: 1,
-      onCreate: (db, version) => db.execute('CREATE TABLE goals(id INTEGER PRIMARY KEY, title TEXT, category TEXT, term TEXT, status TEXT, notes TEXT)'),
+      onCreate: (db, version) => db.execute(
+          'CREATE TABLE goals(id INTEGER PRIMARY KEY, title TEXT, category TEXT, term TEXT, status TEXT, notes TEXT)'),
     );
     return _db!;
   }
 
   Future<void> saveAll(List<Goal> goals) async {
+    if (kIsWeb) return;
+
     final db = await database;
     await db.delete('goals');
     for (final goal in goals) {
-      await db.insert('goals', goal.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
+      await db.insert('goals', goal.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
     }
   }
 }

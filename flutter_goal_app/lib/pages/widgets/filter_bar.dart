@@ -1,38 +1,62 @@
 import 'package:flutter/material.dart';
 
 class FilterBar extends StatelessWidget {
-  final List<String> items;
+  final String label;
+
+  final List<String>? items;
+
   final String? selected;
+
   final ValueChanged<String?> onSelect;
 
-  const FilterBar({super.key, required this.items, required this.selected, required this.onSelect});
+  const FilterBar(
+      {super.key,
+      required this.label,
+      required this.items,
+      required this.selected,
+      required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 54,
-      color: Colors.black12,
-      child: ListView(scrollDirection: Axis.horizontal, padding: const EdgeInsets.all(8), children: [
-        buildItem('All', selected == null, () => onSelect(null)),
-        const SizedBox(width: 8),
-        for (final item in items)
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: buildItem(item, selected == item, () => onSelect(selected == item ? null : item)),
+    final options = items ?? const <String>[];
+
+    final currentValue = options.contains(selected) ? selected : null;
+
+    return SizedBox(
+      width: 148,
+      child: DropdownButtonFormField<String?>(
+        initialValue: currentValue,
+        isExpanded: true,
+        dropdownColor: const Color(0xFF242526),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(color: Color(0xFFB0B3B8), fontSize: 12),
+          filled: true,
+          fillColor: const Color(0xFF18191A),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xFF3A3B3C)),
           ),
-      ]),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xFF1877F2), width: 1.4),
+          ),
+        ),
+        items: [
+          const DropdownMenuItem<String?>(
+            value: null,
+            child: Text('All', overflow: TextOverflow.ellipsis),
+          ),
+          for (final item in options)
+            DropdownMenuItem<String?>(
+              value: item,
+              child: Text(item, overflow: TextOverflow.ellipsis),
+            ),
+        ],
+        onChanged: onSelect,
+      ),
     );
   }
-
-  Widget buildItem(String text, bool isSelected, VoidCallback onTap) => GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF1877F2) : const Color(0xFF3A3B3C),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Text(text, style: TextStyle(fontSize: 12, color: Colors.white, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal)),
-        ),
-      );
 }

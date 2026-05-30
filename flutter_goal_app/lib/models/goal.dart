@@ -1,7 +1,15 @@
 class Goal {
-  Goal({this.id, required this.title, required this.category, required this.term, required this.status, required this.notes});
+  Goal({
+    this.id,
+    required this.title,
+    required this.category,
+    required this.term,
+    required this.status,
+    required this.notes,
+  });
 
   int? id;
+
   String title, category, term, status, notes;
 
   factory Goal.fromJson(Map<String, dynamic> json) => Goal(

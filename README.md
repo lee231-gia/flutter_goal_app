@@ -1,6 +1,6 @@
 # Goal Tracker CRUD API
 
-This is a simple final-exam project: a PHP OOP CRUD API connected to a MySQL database, a Postman collection for testing, and a Flutter/Dart frontend connected to the API.
+This is a simple final-exam project: a PHP OOP CRUD API connected to a MySQL database, manual Postman testing steps, and a Flutter/Dart frontend connected to the API.
 
 ## Tools Used
 
@@ -20,7 +20,6 @@ api_crud/
 |-- goals.php
 |-- index.php
 |-- schema.sql
-|-- postman_collection.json
 |-- env.example
 `-- flutter_goal_app/
     |-- pubspec.yaml
@@ -81,6 +80,8 @@ If you use XAMPP on Windows:
 C:\xampp\php\php.exe -S localhost:8000
 ```
 
+Run the command from the main `api_crud` folder and keep that terminal open.
+
 Open:
 
 ```text
@@ -126,15 +127,29 @@ Update body:
 
 ## Postman Testing
 
-Import `postman_collection.json` into Postman. It already contains:
+Use Postman manually to prove the API works even without the Flutter app.
 
-- Read all goals
-- Read one goal
-- Create goal
-- Update goal
-- Delete goal
+Base URL:
 
-Use Postman to prove the API works even without the Flutter app.
+```text
+http://localhost:8000/goals.php
+```
+
+Test these requests:
+
+| Action | Method | URL |
+| --- | --- | --- |
+| Read all goals | GET | `http://localhost:8000/goals.php` |
+| Read one goal | GET | `http://localhost:8000/goals.php?id=1` |
+| Create goal | POST | `http://localhost:8000/goals.php` |
+| Update goal | PUT | `http://localhost:8000/goals.php` |
+| Delete goal | DELETE | `http://localhost:8000/goals.php?id=1` |
+
+For POST and PUT, add this header:
+
+```text
+Content-Type: application/json
+```
 
 ## Run the Flutter App
 
@@ -143,16 +158,25 @@ Go inside the Flutter folder:
 ```bash
 cd flutter_goal_app
 flutter pub get
-flutter run
+flutter run -d chrome
 ```
 
 Important URL note:
 
-- Android emulator uses `http://10.0.2.2:8000/goals.php`.
-- Real phone must use your computer IP address, for example `http://192.168.1.10:8000/goals.php`.
-- Browser or desktop Flutter can use `http://localhost:8000/goals.php`.
+- Browser and desktop Flutter use `http://localhost:8000/goals.php` automatically.
+- Android emulator can use:
 
-The URL is in `flutter_goal_app/lib/api_services/api_services.dart` inside `ApiService`.
+```bash
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/goals.php
+```
+
+- Real phone must use your computer IP address, for example:
+
+```bash
+flutter run --dart-define=API_BASE_URL=http://192.168.1.10:8000/goals.php
+```
+
+The API URL can be changed with `API_BASE_URL` without editing the code.
 
 ## How the Code Works
 
